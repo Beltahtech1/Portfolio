@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Name — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05060a;
+    --bg-2: #0a0c14;
+    --text: #e8eaf0;
+    --muted: #8a90a6;
+    --accent: #7c5cff;
+    --accent-2: #00e0ff;
+    --border: rgba(255,255,255,0.08);
+    --glass: rgba(255,255,255,0.04);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Aurora background */
+  .aurora {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.55;
+    animation: float 18s ease-in-out infinite;
+  }
+  .blob.a { width: 500px; height: 500px; background: #7c5cff; top: -120px; left: -100px; }
+  .blob.b { width: 450px; height: 450px; background: #00e0ff; top: 30%; right: -150px; animation-delay: -6s; }
+  .blob.c { width: 400px; height: 400px; background: #ff4ecd; bottom: -150px; left: 30%; animation-delay: -12s; }
+  @keyframes float {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(40px,-40px) scale(1.1); }
+  }
+  .noise {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 6vw;
+    backdrop-filter: blur(16px);
+    background: rgba(5,6,10,0.6);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  @media (max-width: 700px) { .nav-links { display: none; } }
+
+  section { padding: 120px 6vw; max-width: 1200px; margin: 0 auto; }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-top: 140px;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 100px;
+    background: var(--glass); border: 1px solid var(--border);
+    font-size: 13px; color: var(--muted);
+    width: fit-content; margin-bottom: 28px;
+  }
+  .badge .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: #22e584;
+    box-shadow: 0 0 12px #22e584;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.4; } }
+
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(44px, 8vw, 96px);
+    line-height: 1.05;
+    letter-spacing: -2.5px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  h1 .grad {
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 50%, #ff4ecd 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .tagline {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--muted);
+    max-width: 620px;
+    margin-bottom: 44px;
+  }
+  .cta-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn {
+    padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 15px;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: transform .2s, box-shadow .2s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #05060a;
+    box-shadow: 0 8px 30px rgba(124,92,255,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(124,92,255,0.5); }
+  .btn-ghost {
+    background: var(--glass); color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+  /* Section headings */
+  .section-label {
+    font-size: 13px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent-2);
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(32px, 5vw, 52px);
+    letter-spacing: -1.5px;
+    font-weight: 700;
+    margin-bottom: 56px;
+  }
+
+  /* About */
+  .about-grid {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 60px;
+    align-items: start;
+  }
+  .about-grid p { color: var(--muted); font-size: 17px; margin-bottom: 18px; }
+  .about-grid strong { color: var(--text); }
+  .skills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .skill {
+    padding: 8px 16px; border-radius: 100px;
+    background: var(--glass); border: 1px solid var(--border);
+    font-size: 13px; font-weight: 500; color: var(--text);
+    transition: all .25s;
+  }
+  .skill:hover { border-color: var(--accent); color: var(--accent-2); transform: translateY(-2px); }
+  .stat-card {
+    background: var(--glass); border: 1px solid var(--border);
+    border-radius: 20px; padding: 28px;
+    backdrop-filter: blur(12px);
+  }
+  .stat-card .num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 42px; font-weight: 700;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stat-card .lbl { color: var(--muted); font-size: 14px; }
+  .stat-card + .stat-card { margin-top: 18px; }
+
+  /* Projects */
+  .projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+  .project {
+    position: relative;
+    background: var(--glass); border: 1px solid var(--border);
+    border-radius: 20px; padding: 32px;
+    backdrop-filter: blur(12px);
+    transition: all .35s;
+    overflow: hidden;
+  }
+  .project::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at var(--x,50%) var(--y,50%), rgba(124,92,255,0.15), transparent 60%);
+    opacity: 0; transition: opacity .35s;
+    pointer-events: none;
+  }
+  .project:hover { transform: translateY(-6px); border-color: rgba(124,92,255,0.4); }
+  .project:hover::before { opacity: 1; }
+  .project-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; color: var(--accent-2); font-weight: 600;
+    letter-spacing: 1px; margin-bottom: 16px;
+  }
+  .project h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 700; margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+  .project p { color: var(--muted); font-size: 15px; margin-bottom: 22px; }
+  .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .tag {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+    padding: 4px 10px; border-radius: 6px;
+    background: rgba(124,92,255,0.12); color: #b8a8ff;
+    border: 1px solid rgba(124,92,255,0.25);
+  }
+  .project-link {
+    color: var(--text); text-decoration: none; font-size: 14px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: gap .2s, color .2s;
+  }
+  .project-link:hover { gap: 10px; color: var(--accent-2); }
+
+  /* Contact */
+  .contact-card {
+    background: linear-gradient(135deg, rgba(124,92,255,0.12), rgba(0,224,255,0.08));
+    border: 1px solid var(--border);
+    border-radius: 28px; padding: 64px 48px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    position: relative; overflow: hidden;
+  }
+  .contact-card h2 { margin-bottom: 16px; }
+  .contact-card p { color: var(--muted); margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+  .socials { display: flex; gap: 14px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
+  .social {
+    padding: 10px 20px; border-radius: 10px;
+    background: var(--glass); border: 1px solid var(--border);
+    color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500;
+    transition: all .25s;
+  }
+  .social:hover { color: var(--text); border-color: var(--accent); transform: translateY(-2px); }
+
+  footer {
+    text-align: center; padding: 40px 6vw;
+    color: var(--muted); font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Reveal animation */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s, transform .8s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 800px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    section { padding: 80px 5vw; }
+    .contact-card { padding: 48px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="aurora">
+  <div class="blob a"></div>
+  <div class="blob b"></div>
+  <div class="blob c"></div>
+</div>
+<div class="noise"></div>
+
+<nav>
+  <div class="logo">yourname.dev</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge"><span class="dot"></span> Available for new projects</div>
+  <h1>
+    Hi, I'm <span class="grad">Your Name</span>.<br>
+    I build things for the web.
+  </h1>
+  <p class="tagline">
+    A creative developer crafting fast, beautiful, and accessible digital experiences.
+    Currently focused on building interfaces that feel alive.
+  </p>
+  <div class="cta-row">
+    <a href="#work" class="btn btn-primary">View my work →</a>
+    <a href="#contact" class="btn btn-ghost">Get in touch</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="reveal">
+  <div class="section-label">01 — About</div>
+  <h2>A bit about me.</h2>
+  <div class="about-grid">
+    <div>
+      <p>
+        I'm a <strong>full-stack developer</strong> based in Earth, obsessed with the small
+        details that make products feel effortless. I enjoy turning complex problems into
+        simple, elegant interfaces.
+      </p>
+      <p>
+        When I'm not coding, you'll find me sketching designs, exploring new tools, or
+        over-caffeinating on side projects. I care deeply about performance, accessibility,
+        and shipping things that matter.
+      </p>
+      <div class="skills">
+        <span class="skill">JavaScript</span>
+        <span class="skill">TypeScript</span>
+        <span class="skill">React</span>
+        <span class="skill">Node.js</span>
+        <span class="skill">Tailwind</span>
+        <span class="skill">Figma</span>
+        <span class="skill">PostgreSQL</span>
+        <span class="skill">Three.js</span>
+      </div>
+    </div>
+    <div>
+      <div class="stat-card">
+        <div class="num">4+</div>
+        <div class="lbl">Years of experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">20+</div>
+        <div class="lbl">Projects shipped</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">∞</div>
+        <div class="lbl">Cups of coffee</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work" class="reveal">
+  <div class="section-label">02 — Work</div>
+  <h2>Selected projects.</h2>
+  <div class="projects">
+    <div class="project">
+      <div class="project-num">/ 01</div>
+      <h3>Project One</h3>
+      <p>A short, punchy description of what this project does and why it's cool. Mention the impact or a metric if you can.</p>
+      <div class="project-tags">
+        <span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Tailwind</span>
+      </div>
+      <a href="#" class="project-link">View case study →</a>
+    </div>
+    <div class="project">
+      <div class="project-num">/ 02</div>
+      <h3>Project Two</h3>
+      <p>Another great project. Keep it to 1-2 sentences focused on the outcome, not just the tech stack.</p>
+      <div class="project-tags">
+        <span class="tag">Next.js</span><span class="tag">Postgres</span><span class="tag">Stripe</span>
+      </div>
+      <a href="#" class="project-link">View case study →</a>
+    </div>
+    <div class="project">
+      <div class="project-num">/ 03</div>
+      <h3>Project Three</h3>
+      <p>Something creative or experimental. Show off your range here — a game, a tool, a visual experiment.</p>
+      <div class="project-tags">
+        <span class="tag">Three.js</span><span class="tag">WebGL</span><span class="tag">GLSL</span>
+      </div>
+      <a href="#" class="project-link">View case study →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="reveal">
+  <div class="contact-card">
+    <div class="section-label">03 — Contact</div>
+    <h2>Let's build something.</h2>
+    <p>Have a project in mind, or just want to say hi? My inbox is always open.</p>
+    <a href="mailto:you@example.com" class="btn btn-primary">you@example.com</a>
+    <div class="socials">
+      <a href="#" class="social">GitHub</a>
+      <a href="#" class="social">LinkedIn</a>
+      <a href="#" class="social">X / Twitter</a>
+      <a href="#" class="social">Dribbble</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Designed & built by Your Name · © 2025
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Cursor glow on project cards
+  document.querySelectorAll('.project').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--x', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--y', `${e.clientY - rect.top}px`);
+    });
+  });
+</script>
+
+</body>
+</html>
